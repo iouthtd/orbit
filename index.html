@@ -1,0 +1,52 @@
+<!doctype HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<script id="vertexShader" type="-">
+		attribute vec4 a_position;
+		attribute vec2 a_texCoord;
+		
+		uniform mat4 u_matrix;
+		
+		varying vec2 v_texCoord;
+		
+		void main() {
+			vec4 position = u_matrix * a_position;
+			float zToDivideBy = 1.0 + position.z;
+			gl_Position = vec4(position.xyz, zToDivideBy);
+			v_texCoord = a_texCoord;
+		}
+	</script>
+
+	<script id="fragmentShader" type="-">
+		precision mediump float;
+		
+		uniform sampler2D u_image;
+		uniform vec4 u_color;
+		
+		varying vec2 v_texCoord;
+		
+		void main() {
+			
+			gl_FragColor = texture2D(u_image, v_texCoord) * u_color;
+		}
+	</script>
+	<style>
+		#main {
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+	<div id="main">
+		<canvas id="canvas" style="border: 1px solid; background-image: url(img/space256.png);" width="512" height="512"></canvas>
+
+		<div>
+			<button id="addPlanet">Add Planet</button>
+		</div>
+	</div>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="js/gravity.js"></script>
+</body>
+</html>
